@@ -18,25 +18,20 @@
 
 ## 📌 Overview
 
-Offline SSSD / nsswitch / krb5 / realmd identity-client configuration auditor
+
+OSssdX is an offline, read-only auditor for the Linux identity-client stack: SSSD, NSS, Kerberos and realmd. It parses sssd.conf (with conf.d merging and per-domain analysis), checks LDAP transport security, credential exposure, access-control gaps, nsswitch ordering and krb5 crypto. Secrets are always masked, findings are mapped to CWE and MITRE ATT&CK, and reports export to TXT, Markdown, JSON, CSV or SARIF.
 
 ---
 
 ## ✨ Features
 
-- Offline, read-only auditor for the Linux identity *client* stack (SSSD, NSS, Kerberos, realmd)
-- sssd.conf parser with conf.d snippet merging, per-domain analysis (ldap / ad / ipa / krb5 / proxy)
-- Transport checks — ldap:// without StartTLS, tls_reqcert never/allow, TLS-disable kill switch
-- Credential exposure — plaintext / obfuscated bind passwords (always masked), offline password caching
-- Access control — permit / missing access_provider, empty simple allow lists, GPO permissive, min_id
-- nsswitch.conf — direct ldap/nis sources, ordering, sudoers / automount source hygiene
-- krb5.conf — weak crypto, DES/RC4 enctypes, rdns, DNS realm lookup, forwardable, lifetimes, PKINIT
-- realmd.conf — residual one-time passwords (masked), automatic join, insecure home / shell defaults
-- File permission checks (sssd.conf, keytab, cache)
-- CWE + MITRE ATT&CK mapping, score & grade
-- Exports TXT / MD / JSON / CSV / SARIF 2.1.0
-- Hardened templates, rule catalogue, --explain
-- Self-test --demo with weak + hardened fixtures
+
+- sssd.conf parser with conf.d snippet merging and per-domain analysis (ldap/ad/ipa/krb5/proxy)
+- Transport checks: ldap:// without StartTLS, tls_reqcert never/allow, TLS-disable kill switch
+- Credential exposure: plaintext/obfuscated bind passwords (masked) and offline password caching
+- Access control: permit / missing access_provider, empty allow lists, permissive GPO, min_id
+- nsswitch.conf source/ordering hygiene and krb5.conf weak-crypto (DES/RC4), rdns and lifetime checks
+- File-permission checks, CWE+ATT&CK mapping, score/grade and TXT/MD/JSON/CSV/SARIF export
 
 ---
 
@@ -49,8 +44,13 @@ Offline SSSD / nsswitch / krb5 / realmd identity-client configuration auditor
 
 ## 🚀 Usage
 
+
 ```bash
-./OSssdX
+./OSssdX --scan -f sarif -o sssd.sarif
+./OSssdX --sssd /etc/sssd/sssd.conf --krb5 /etc/krb5.conf
+./OSssdX --root /mnt/image --fail-on high
+./OSssdX --demo
+./OSssdX --help
 ```
 
 ---
